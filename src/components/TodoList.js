@@ -3,7 +3,8 @@ import styled from 'styled-components'
 import { FilteredList } from './filteredList'
 import TodoItem from './TodoItem'
 
-const TodoList = ({ items, toggleComplete, showAll, showActive, showCompleted}) => {
+const TodoList = ({ list, items, toggleComplete, showAll, showActive, showCompleted }) => {
+  
  
   return (
     <Wrapper>
