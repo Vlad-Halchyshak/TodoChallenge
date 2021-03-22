@@ -5,32 +5,32 @@ const initialState = {
     {
       id: 1,
       completed: false,
-      text: 'Read README'
+      text: 'Read README',
     },
     {
       id: 2,
       completed: false,
-      text: 'Add one todo'
+      text: 'Add one todo',
     },
     {
       id: 3,
       completed: false,
-      text: 'Add filters'
+      text: 'Add filters',
     },
     {
       id: 4,
       completed: false,
-      text: 'Add multiple lists'
+      text: 'Add multiple lists',
     },
     {
       id: 5,
       completed: false,
-      text: 'Optional: add tests'
-    }
-  ]
+      text: 'Optional: add tests',
+    },
+  ],
 }
 
-function syncStorage (state) {
+function syncStorage(state) {
   if (window && window.localStorage) {
     window.localStorage.setItem('appState', JSON.stringify(state))
   }
@@ -49,42 +49,49 @@ function reducer(state, action) {
       return initialState
 
     case 'toggle_complete':
-        const { id } = action
+      const { id } = action
 
-        return {
-          list: state.list.map(item => {
-            if (item.id === id) {
-              return {
-                ...item,
-                completed: !item.completed
-              }
+      return {
+        list: state.list.map((item) => {
+          if (item.id === id) {
+            return {
+              ...item,
+              completed: !item.completed,
             }
+          }
 
-            return item
-          })
-        }
+          return item
+        }),
+      }
+    case 'show_all':
+      return state
+    case 'show_active':
+      return state.filter((t) => !t.completed)
+    case 'show_completed':
+      return state.filter((t) => t.completed)
     case 'create_todo':
       const { text } = action
       const item = {
         completed: false,
         text,
-        id: state.list.length + 1
+        id: state.list.length + 1,
       }
 
       const list = state.list.concat(item)
       return { list }
 
     default:
-      throw new Error('Unknown type: ' + action.type);
+      throw new Error('Unknown type: ' + action.type)
   }
 }
 
 function useTodos() {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState)
+
   const { list } = state
 
   useEffect(() => {
-    dispatch({type: 'read_storage' })
+    dispatch({ type: 'read_storage' })
   }, [dispatch])
 
   useEffect(() => {
@@ -93,8 +100,19 @@ function useTodos() {
 
   const createTodo = (text) => dispatch({ type: 'create_todo', text })
   const toggleComplete = (id) => dispatch({ type: 'toggle_complete', id })
+  const showAll = () => dispatch({ type: 'show_all' })
+  const showActive = (completed) => dispatch({ type: 'show_active', completed })
+  const showCompleted = (completed) =>
+    dispatch({ type: 'show_completed', completed })
 
-  return { list, createTodo, toggleComplete }
+  return {
+    list,
+    createTodo,
+    toggleComplete,
+    showAll,
+    showActive,
+    showCompleted,
+  }
 }
 
 export default useTodos

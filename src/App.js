@@ -6,17 +6,24 @@ import useTodos from './useTodos'
 
 import TodoList from './components/TodoList'
 import AddTodo from './components/AddTodo'
+import { FilteredList } from './components/filteredList'
 
 function App () {
-  const { list, createTodo, toggleComplete } = useTodos()
+  const { list, createTodo, toggleComplete, showAll, showActive, showCompleted } = useTodos()
 
   return (
-      <Wrapper>
-        <TodosWrapper>
-          <AddTodo onAddTodo={createTodo} />
-          <TodoList items={list} toggleComplete={toggleComplete} />
-        </TodosWrapper>
-      </Wrapper>
+    <Wrapper>
+      <TodosWrapper>
+        <AddTodo onAddTodo={createTodo} />
+        <TodoList
+          items={list}
+          toggleComplete={toggleComplete}
+          showAll={showAll}
+          showActive={showActive}
+          showCompleted={showCompleted}
+        />
+      </TodosWrapper>
+    </Wrapper>
   )
 }
 
